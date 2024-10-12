@@ -1,12 +1,22 @@
 import { Router } from "express";
 import { ProjectRoutes } from "./routes/projectRoutes";
+import { RequestAPI, ResponseAPI } from "./types/express";
+import { UsersRoutes } from "./routes/usersRoutes";
+import { AuthRoutes } from "./routes/authRoutes";
+import { StatesRoutes } from "./routes/statesRoutes";
 
 const router = Router();
 
-router.use("/projects", ProjectRoutes());
+router.use("/api/users", UsersRoutes());
+router.use("/api/projects", ProjectRoutes());
+router.use("/api/authentication", AuthRoutes());
+router.use("/api/states", StatesRoutes());
 
-router.get("/", (req, res) => {
-	res.json("hola");
+router.get("/*", (req: RequestAPI, res: ResponseAPI) => {
+	res.status(200).json({
+		message: "Server up and running!",
+		status: true,
+	});
 });
 
 export default router;

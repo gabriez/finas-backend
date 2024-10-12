@@ -1,9 +1,11 @@
 import { Router } from "express";
+import { param, body } from "express-validator";
+
 import {
 	CreateProjectHandler,
 	GetOnlyProjectHandler,
 } from "../handlers/projectsHandler";
-import { param } from "express-validator";
+import HandleInputErrorsMiddleware from "../middlewares/validations";
 
 export const ProjectRoutes = () => {
 	const routerRoot = Router();
@@ -12,8 +14,15 @@ export const ProjectRoutes = () => {
 	routerRoot.get(
 		"/:id",
 		param("id").isInt().withMessage("ID invalido"),
+		HandleInputErrorsMiddleware,
 		GetOnlyProjectHandler
 	);
+
+	routerRoot.get("/");
+	routerRoot.put("/:id");
+	routerRoot.delete("/:id");
+
+	routerRoot.get("/statistics");
 
 	return routerRoot;
 };

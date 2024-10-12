@@ -36,6 +36,16 @@ class Users extends Model {
 	password: string;
 
 	@Column({
+		type: DataType.STRING(25),
+	})
+	phone: string;
+
+	@Column({
+		type: DataType.STRING(25),
+	})
+	cedula: string;
+
+	@Column({
 		type: DataType.INTEGER,
 	})
 	@ForeignKey(() => Roles)
