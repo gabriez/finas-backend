@@ -9,11 +9,12 @@ const HandleInputErrorsMiddleware = (
 ) => {
 	let errors = validationResult(req);
 	if (!errors.isEmpty) {
-		return res.status(400).json({
+		res.status(400).json({
 			status: false,
 			message: "The request data is wrong",
 			data: errors.array(),
 		});
+		return;
 	}
 	next();
 };

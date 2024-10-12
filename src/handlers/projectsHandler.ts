@@ -11,18 +11,20 @@ const CreateProjectHandler = async (
 		let project = new Projects(body);
 		let resultProject = await project.save();
 
-		return res.status(200).json({
+		res.status(200).json({
 			status: true,
 			message: "Proyecto creado",
 			data: resultProject,
 		});
+		return;
 	} catch (error) {
 		console.log("> error in CreateProjectHandler", error);
-		return res.status(500).json({
+		res.status(500).json({
 			status: false,
 			message:
 				"Ocurrió un error inesperado, por favor vuelva  intentar más tarde.",
 		});
+		return;
 	}
 };
 
@@ -35,24 +37,27 @@ const GetOnlyProjectHandler = async (
 		const project = await Projects.findByPk(id);
 
 		if (!project) {
-			return res.status(400).json({
+			res.status(400).json({
 				status: false,
 				message: "El producto no existe",
 			});
+			return;
 		}
 
-		return res.status(200).json({
+		res.status(200).json({
 			status: true,
 			data: project,
 			message: "Exito",
 		});
+		return;
 	} catch (error) {
 		console.log("> error in GetOnlyProjectHandler", error);
-		return res.status(500).json({
+		res.status(500).json({
 			status: false,
 			message:
 				"Ocurrió un error inesperado, por favor vuelva  intentar más tarde.",
 		});
+		return;
 	}
 };
 
