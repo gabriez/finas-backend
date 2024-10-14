@@ -1,12 +1,12 @@
 import express from "express";
 import colors from "colors";
 import cors, { CorsOptions } from "cors";
-
-import router from "./routes";
-import db from "./config/db";
 import morgan from "morgan";
-import { seedRoles } from "./seed/seedRoles";
-import { seedSuperAdmin } from "./seed/seedSuperAdmin";
+
+import router from "./routes.js";
+import db from "./config/db.js";
+import { seedRoles } from "./seed/seedRoles.js";
+import { seedSuperAdmin } from "./seed/seedSuperAdmin.js";
 
 async function connectDB() {
 	try {

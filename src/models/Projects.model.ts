@@ -7,8 +7,8 @@ import {
 	ForeignKey,
 	BelongsTo,
 } from "sequelize-typescript";
-import Users from "./Users.model";
-import Status from "./Status.model";
+import Users from "./Users.model.js";
+import Status from "./Status.model.js";
 
 @Table({
 	tableName: "projects",

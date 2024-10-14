@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import colors from "colors";
-import Users from "../models/Users.model";
+import Users from "../models/Users.model.js";
 import {
 	ReqCreateUser,
 	ReqGetOneUser,
@@ -8,7 +8,7 @@ import {
 	ReqUpdateUser,
 } from "../types/users";
 import { ResponseAPI } from "../types/express";
-import Roles from "../models/Roles.model";
+import Roles from "../models/Roles.model.js";
 import { Op } from "sequelize";
 
 const getUsers = async (req: ReqGetUsers, res: ResponseAPI) => {

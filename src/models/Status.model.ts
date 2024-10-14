@@ -6,7 +6,7 @@ import {
 	Default,
 	HasMany,
 } from "sequelize-typescript";
-import Projects from "./Projects.model";
+import Projects from "./Projects.model.js";
 
 @Table({
 	tableName: "status",

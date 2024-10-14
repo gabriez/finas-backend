@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
 import { NextFunction } from "express";
 import { RequestAPI, ResponseAPI } from "../types/express";
-import { jwtSecret } from "../config/constants";
-import Users from "../models/Users.model";
+import { jwtSecret } from "../config/constants.js";
+import Users from "../models/Users.model.js";
 
 async function verifyToken(
 	req: RequestAPI,

@@ -4,8 +4,8 @@ import { param, body } from "express-validator";
 import {
 	CreateProjectHandler,
 	GetOnlyProjectHandler,
-} from "../handlers/projectsHandler";
-import HandleInputErrorsMiddleware from "../middlewares/validations";
+} from "../handlers/projectsHandler.js";
+import HandleInputErrorsMiddleware from "../middlewares/validations.js";
 
 export const ProjectRoutes = () => {
 	const routerRoot = Router();

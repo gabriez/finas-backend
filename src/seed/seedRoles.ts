@@ -1,4 +1,4 @@
-import Roles from "../models/Roles.model";
+import Roles from "../models/Roles.model.js";
 
 export const seedRoles = async () => {
 	let roles = await Roles.findAll({

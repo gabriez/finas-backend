@@ -1,4 +1,4 @@
-import Projects from "../models/Projects.model";
+import Projects from "../models/Projects.model.js";
 import { ResponseAPI } from "../types/express";
 import { ReqCreateProject, ReqGetOnlyProject } from "../types/project";
 

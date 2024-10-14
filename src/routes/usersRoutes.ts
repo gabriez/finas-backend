@@ -1,14 +1,14 @@
 import { Router } from "express";
 import { param, body } from "express-validator";
 
-import HandleInputErrorsMiddleware from "../middlewares/validations";
-import { isSuperAdmin, verifyToken } from "../middlewares/authentication";
+import HandleInputErrorsMiddleware from "../middlewares/validations.js";
+import { isSuperAdmin, verifyToken } from "../middlewares/authentication.js";
 import {
 	createUser,
 	getOneUser,
 	getUsers,
 	putUser,
-} from "../handlers/usersHandler";
+} from "../handlers/usersHandler.js";
 
 export const UsersRoutes = () => {
 	const routerRoot = Router();

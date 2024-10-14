@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 
-import { jwtSecret } from "../config/constants";
-import Users from "../models/Users.model";
+import { jwtSecret } from "../config/constants.js";
+import Users from "../models/Users.model.js";
 import { ReqLogin } from "../types/auth";
 import { ResponseAPI } from "../types/express";
 

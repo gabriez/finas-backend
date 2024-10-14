@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { ProjectRoutes } from "./routes/projectRoutes";
+import { ProjectRoutes } from "./routes/projectRoutes.js";
 import { RequestAPI, ResponseAPI } from "./types/express";
-import { UsersRoutes } from "./routes/usersRoutes";
-import { AuthRoutes } from "./routes/authRoutes";
-import { StatesRoutes } from "./routes/statesRoutes";
+import { UsersRoutes } from "./routes/usersRoutes.js";
+import { AuthRoutes } from "./routes/authRoutes.js";
+import { StatesRoutes } from "./routes/statesRoutes.js";
 
 const router = Router();
 

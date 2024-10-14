@@ -12,8 +12,8 @@ import {
 } from "sequelize-typescript";
 import bcrypt from "bcrypt";
 
-import Roles from "./Roles.model";
-import Projects from "./Projects.model";
+import Roles from "./Roles.model.js";
+import Projects from "./Projects.model.js";
 
 @Table({
 	tableName: "users",

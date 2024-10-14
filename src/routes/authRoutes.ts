@@ -1,12 +1,12 @@
 import { Router } from "express";
 import { param, body } from "express-validator";
 
-import HandleInputErrorsMiddleware from "../middlewares/validations";
+import HandleInputErrorsMiddleware from "../middlewares/validations.js";
 import {
 	forgotPasswordHandler,
 	loginHandler,
 	registerHandler,
-} from "../handlers/authHandlers";
+} from "../handlers/authHandlers.js";
 
 export const AuthRoutes = () => {
 	const routerRoot = Router();

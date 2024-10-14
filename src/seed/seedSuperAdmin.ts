@@ -1,4 +1,4 @@
-import Users from "../models/Users.model";
+import Users from "../models/Users.model.js";
 
 export const seedSuperAdmin = async () => {
 	let user = await Users.findOne({

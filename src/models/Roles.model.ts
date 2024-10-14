@@ -6,7 +6,7 @@ import {
 	Default,
 	HasMany,
 } from "sequelize-typescript";
-import Users from "./Users.model";
+import Users from "./Users.model.js";
 
 @Table({
 	tableName: "roles",
