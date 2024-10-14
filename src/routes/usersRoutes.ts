@@ -2,20 +2,24 @@ import { Router } from "express";
 import { param, body } from "express-validator";
 
 import HandleInputErrorsMiddleware from "../middlewares/validations";
+import { isSuperAdmin, verifyToken } from "../middlewares/authentication";
+import {
+	createUser,
+	getOneUser,
+	getUsers,
+	putUser,
+} from "../handlers/usersHandler";
 
 export const UsersRoutes = () => {
 	const routerRoot = Router();
+	// verifyToken
+	routerRoot.get("/", verifyToken, getUsers);
 
-	routerRoot.get("/");
-	routerRoot.get("/encargados");
+	routerRoot.get("/:id", getOneUser);
 
-	routerRoot.get("/:id");
-	routerRoot.get("/encargados/:id");
+	routerRoot.post("/", verifyToken, isSuperAdmin, createUser);
 
-	routerRoot.post("/");
-
-	routerRoot.put("/:id");
-	routerRoot.put("/encargados/:id");
+	routerRoot.patch("/:id", verifyToken, isSuperAdmin, putUser);
 
 	return routerRoot;
 };

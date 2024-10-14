@@ -39,10 +39,71 @@ const GetOnlyProjectHandler = async (
 		if (!project) {
 			res.status(400).json({
 				status: false,
-				message: "El producto no existe",
+				message: "El proyecto no existe",
 			});
 			return;
 		}
+
+		res.status(200).json({
+			status: true,
+			data: project,
+			message: "Exito",
+		});
+		return;
+	} catch (error) {
+		console.log("> error in GetOnlyProjectHandler", error);
+		res.status(500).json({
+			status: false,
+			message:
+				"Ocurrió un error inesperado, por favor vuelva  intentar más tarde.",
+		});
+		return;
+	}
+};
+
+const GetProjects = async (req: ReqGetOnlyProject, res: ResponseAPI) => {
+	try {
+		const projects = await Projects.findAll();
+
+		if (projects.length == 0) {
+			res.status(400).json({
+				status: false,
+				message: "No hay proyectos",
+			});
+			return;
+		}
+
+		res.status(200).json({
+			status: true,
+			data: projects,
+			message: "Exito",
+		});
+		return;
+	} catch (error) {
+		console.log("> error in GetOnlyProjectHandler", error);
+		res.status(500).json({
+			status: false,
+			message:
+				"Ocurrió un error inesperado, por favor vuelva  intentar más tarde.",
+		});
+		return;
+	}
+};
+
+const DeleteProject = async (req: ReqGetOnlyProject, res: ResponseAPI) => {
+	try {
+		const { id } = req.params;
+		const project = await Projects.findByPk(id);
+
+		if (!project) {
+			res.status(400).json({
+				status: false,
+				message: "El proyecto no existe",
+			});
+			return;
+		}
+
+		await project.destroy();
 
 		res.status(200).json({
 			status: true,

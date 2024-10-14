@@ -7,7 +7,11 @@ import {
 	ForeignKey,
 	BelongsTo,
 	HasMany,
+	BeforeCreate,
+	BeforeUpdate,
 } from "sequelize-typescript";
+import bcrypt from "bcrypt";
+
 import Roles from "./Roles.model";
 import Projects from "./Projects.model";
 
@@ -15,6 +19,12 @@ import Projects from "./Projects.model";
 	tableName: "users",
 })
 class Users extends Model {
+	@Column({
+		type: DataType.STRING(100),
+		unique: true,
+	})
+	username: string;
+
 	@Column({
 		type: DataType.STRING(100),
 	})
@@ -27,6 +37,7 @@ class Users extends Model {
 
 	@Column({
 		type: DataType.STRING(100),
+		unique: true,
 	})
 	email: string;
 
@@ -38,12 +49,12 @@ class Users extends Model {
 	@Column({
 		type: DataType.STRING(25),
 	})
-	phone: string;
+	phone?: string;
 
 	@Column({
 		type: DataType.STRING(25),
 	})
-	cedula: string;
+	cedula?: string;
 
 	@Column({
 		type: DataType.INTEGER,
@@ -56,6 +67,28 @@ class Users extends Model {
 
 	@HasMany(() => Projects)
 	projects: Projects[];
+
+	@BeforeUpdate
+	@BeforeCreate
+	static async encryptPassword(instance) {
+		const salt = await bcrypt.genSalt(10);
+		instance.dataValues.password = await bcrypt.hash(
+			instance.dataValues.password,
+			salt
+		);
+	}
+
+	async comparePassword(password: string): Promise<boolean> {
+		return await bcrypt.compare(password, this.dataValues.password);
+	}
 }
+
+// const encryptPassword = async (instance: Users) => {
+// 	const salt = await bcrypt.genSalt(10);
+// 	console.log(instance.password);
+// 	instance.password = await bcrypt.hash(instance.password, salt);
+// };
+
+// Users.beforeCreate("encryptPassword", Users.encryptPassword);
 
 export default Users;

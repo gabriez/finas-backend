@@ -12,8 +12,7 @@ const __dirname = dirname(__filename);
 dotenv.config();
 
 const db = new Sequelize(process.env.DATABASE_URL!, {
-	// models: [__dirname + "/../models/**/*.ts"],
-	models: [join(__dirname, "../models/*.ts")],
+	models: [join(__dirname, "../models/*")],
 });
 
 db.addModels([Projects, Users, Roles]);

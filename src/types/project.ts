@@ -4,7 +4,6 @@ export interface ReqCreateProject
 	extends RequestAPI<{
 		titulo: string;
 		descripcion: string;
-		ubicacion: string;
 		encargadoId: number;
 		userId: number;
 		enteEmail: string;

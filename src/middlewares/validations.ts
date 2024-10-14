@@ -8,15 +8,21 @@ const HandleInputErrorsMiddleware = (
 	next: NextFunction
 ) => {
 	let errors = validationResult(req);
-	if (!errors.isEmpty) {
+	if (!errors.isEmpty()) {
 		res.status(400).json({
 			status: false,
-			message: "The request data is wrong",
+			message: "La información ingresada es incorrecta",
 			data: errors.array(),
 		});
 		return;
 	}
 	next();
 };
+
+const CacheStatesMiddleware = (
+	req: RequestAPI,
+	res: ResponseAPI,
+	next: NextFunction
+) => {};
 
 export default HandleInputErrorsMiddleware;

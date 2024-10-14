@@ -11,7 +11,11 @@ import {
 export const AuthRoutes = () => {
 	const routerRoot = Router();
 
-	routerRoot.post("/login", loginHandler);
+	routerRoot.post(
+		"/login",
+
+		loginHandler
+	);
 	routerRoot.post("/register", registerHandler);
 	routerRoot.post("/confirmation");
 	routerRoot.post("/forgot-password", forgotPasswordHandler);
