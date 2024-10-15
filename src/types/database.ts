@@ -1,6 +1,6 @@
-import Projects from "../models/Projects.model";
-import Roles from "../models/Roles.model";
-import Users from "../models/Users.model";
+import Projects from "../models/Projects.model.js";
+import Roles from "../models/Roles.model.js";
+import Users from "../models/Users.model.js";
 import { RequestAPI } from "./express";
 import { ProjectsI } from "./project";
 import { RolesI, UserI } from "./users";
