@@ -19,7 +19,7 @@ async function connectDB() {
 	}
 }
 
-connectDB();
+await connectDB();
 await seedRoles();
 await seedSuperAdmin();
 

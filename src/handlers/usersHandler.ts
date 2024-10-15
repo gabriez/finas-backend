@@ -7,7 +7,7 @@ import {
 	ReqGetUsers,
 	ReqUpdateUser,
 } from "../types/users";
-import { ResponseAPI } from "../types/express";
+import { RequestAPI, ResponseAPI } from "../types/express";
 import Roles from "../models/Roles.model.js";
 import { Op } from "sequelize";
 
@@ -198,4 +198,26 @@ const putUser = async (req: ReqUpdateUser, res: ResponseAPI) => {
 	}
 };
 
-export { createUser, getOneUser, getUsers, putUser };
+const getRoles = async (req: RequestAPI, res: ResponseAPI) => {
+	try {
+		let roles = await Roles.findAll({});
+
+		res.status(200).json({
+			status: true,
+			message: "Consulta exitosa",
+			data: roles,
+		});
+		return;
+	} catch (error) {
+		console.log(
+			colors.bgRed.white(`Ocurrio un error en la obtencion de roles. ${error}`)
+		);
+		res.status(500).json({
+			status: false,
+			message: "Ocurrio un error en el servidor",
+		});
+		return;
+	}
+};
+
+export { createUser, getOneUser, getUsers, putUser, getRoles };

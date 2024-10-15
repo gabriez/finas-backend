@@ -6,6 +6,7 @@ import { isSuperAdmin, verifyToken } from "../middlewares/authentication.js";
 import {
 	createUser,
 	getOneUser,
+	getRoles,
 	getUsers,
 	putUser,
 } from "../handlers/usersHandler.js";
@@ -15,7 +16,9 @@ export const UsersRoutes = () => {
 	// verifyToken
 	routerRoot.get("/", verifyToken, getUsers);
 
-	routerRoot.get("/:id", getOneUser);
+	routerRoot.get("/:id", verifyToken, isSuperAdmin, getOneUser);
+
+	routerRoot.get("/roles", getRoles);
 
 	routerRoot.post("/", verifyToken, isSuperAdmin, createUser);
 

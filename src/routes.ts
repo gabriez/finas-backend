@@ -5,6 +5,7 @@ import { UsersRoutes } from "./routes/usersRoutes.js";
 import { AuthRoutes } from "./routes/authRoutes.js";
 import { StatesRoutes } from "./routes/statesRoutes.js";
 import CacheStatesMiddleware from "./middlewares/statesMiddleware.js";
+import { DatabaseRoutes } from "./routes/databaseRoutes.js";
 
 const router = Router();
 
@@ -12,6 +13,7 @@ router.use("/api/users", UsersRoutes());
 router.use("/api/projects", ProjectRoutes());
 router.use("/api/authentication", AuthRoutes());
 router.use("/api/states", CacheStatesMiddleware, StatesRoutes());
+router.use("/api/database", DatabaseRoutes());
 
 router.get("/*", (req: RequestAPI, res: ResponseAPI) => {
 	res.status(200).json({

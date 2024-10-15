@@ -1,9 +1,16 @@
+import Roles from "../models/Roles.model.js";
 import Users from "../models/Users.model.js";
 
 export const seedSuperAdmin = async () => {
 	let user = await Users.findOne({
 		where: {
 			email: "superadmin@gmail.com",
+		},
+	});
+
+	let roles = await Roles.findOne({
+		where: {
+			rol: ["admin"],
 		},
 	});
 	if (user) {
@@ -16,6 +23,6 @@ export const seedSuperAdmin = async () => {
 		nombre: "Admin",
 		apellido: "FINAS",
 		username: "SuperAdmin",
-		roleId: 1,
+		roleId: roles.dataValues.id,
 	});
 };

@@ -6,7 +6,6 @@ export const seedRoles = async () => {
 			rol: ["admin", "encargado", "user"],
 		},
 	});
-
 	if (roles.length === 3) {
 		return;
 	}

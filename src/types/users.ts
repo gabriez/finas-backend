@@ -43,3 +43,24 @@ export interface ReqGetUsers
 			rol: "encargado" | "all";
 		}
 	> {}
+
+export interface UserI {
+	id: number;
+	username: string;
+	nombre: string;
+	apellido: string;
+	email: string;
+	password: string;
+	phone?: string;
+	cedula?: string;
+	roleId: number;
+	createdAt: string;
+	updatedAt: string;
+}
+
+export interface RolesI {
+	id: number;
+	rol: string;
+	createdAt: string;
+	updatedAt: string;
+}

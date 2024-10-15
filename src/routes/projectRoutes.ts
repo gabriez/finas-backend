@@ -3,12 +3,19 @@ import { param, body } from "express-validator";
 
 import {
 	CreateProjectHandler,
+	DeleteProject,
 	GetOnlyProjectHandler,
+	GetProjects,
+	GetStatistics,
+	GetStatus,
+	PatchProject,
 } from "../handlers/projectsHandler.js";
 import HandleInputErrorsMiddleware from "../middlewares/validations.js";
 
 export const ProjectRoutes = () => {
 	const routerRoot = Router();
+	routerRoot.get("/status", GetStatus);
+	routerRoot.get("/statistics", GetStatistics);
 
 	routerRoot.post("/", CreateProjectHandler);
 	routerRoot.get(
@@ -18,11 +25,9 @@ export const ProjectRoutes = () => {
 		GetOnlyProjectHandler
 	);
 
-	routerRoot.get("/");
-	routerRoot.put("/:id");
-	routerRoot.delete("/:id");
-
-	routerRoot.get("/statistics");
+	routerRoot.get("/", GetProjects);
+	routerRoot.patch("/:id", PatchProject);
+	routerRoot.delete("/:id", DeleteProject);
 
 	return routerRoot;
 };
