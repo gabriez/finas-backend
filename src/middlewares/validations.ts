@@ -19,10 +19,4 @@ const HandleInputErrorsMiddleware = (
 	next();
 };
 
-const CacheStatesMiddleware = (
-	req: RequestAPI,
-	res: ResponseAPI,
-	next: NextFunction
-) => {};
-
 export default HandleInputErrorsMiddleware;

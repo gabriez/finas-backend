@@ -12,6 +12,7 @@ export interface RequestAPI<T = {}, P = {}, Q = {}> extends Request {
 	user?: Users | null;
 	params: P & ParamsDictionary;
 	query: Q & Query;
+	token?: string | null
 }
 
 export interface ResponseAPI<T = any>

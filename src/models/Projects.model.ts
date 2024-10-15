@@ -8,7 +8,6 @@ import {
 	BelongsTo,
 } from "sequelize-typescript";
 import Users from "./Users.model.js";
-import Status from "./Status.model.js";
 
 @Table({
 	tableName: "projects",
@@ -113,13 +112,9 @@ class Projects extends Model {
 	propuesta: string;
 
 	@Column({
-		type: DataType.INTEGER,
+		type: DataType.STRING(255),
 	})
-	@ForeignKey(() => Status)
-	statusId: number;
-
-	@BelongsTo(() => Status)
-	status: Status;
+	status: string;
 
 	@Column({
 		type: DataType.STRING(255),
