@@ -42,19 +42,9 @@ class Projects extends Model {
 	user: Users;
 
 	@Column({
-		type: DataType.INTEGER,
+		type: DataType.STRING(50),
 	})
-	estadoId: number;
-
-	@Column({
-		type: DataType.STRING(100),
-	})
-	estado: string;
-
-	@Column({
-		type: DataType.INTEGER,
-	})
-	municipioId: number;
+	municipioId: string;
 
 	@Column({
 		type: DataType.STRING(100),
@@ -62,9 +52,9 @@ class Projects extends Model {
 	municipio: string;
 
 	@Column({
-		type: DataType.INTEGER,
+		type: DataType.STRING(50),
 	})
-	parroquiaId: number;
+	parroquiaId: string;
 
 	@Column({
 		type: DataType.STRING(100),
@@ -72,9 +62,9 @@ class Projects extends Model {
 	parroquia: string;
 
 	@Column({
-		type: DataType.INTEGER,
+		type: DataType.STRING(50),
 	})
-	sectorId: number;
+	sectorId: string;
 
 	@Column({
 		type: DataType.STRING(100),

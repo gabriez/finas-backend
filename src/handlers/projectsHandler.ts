@@ -13,6 +13,7 @@ const CreateProjectHandler = async (
 	res: ResponseAPI
 ) => {
 	let body = req.body;
+	console.log(body.status);
 	if (!status.includes(body.status)) {
 		res.status(400).json({
 			status: false,
@@ -80,7 +81,7 @@ const GetProjects = async (req: RequestAPI, res: ResponseAPI) => {
 		const projects = await Projects.findAll();
 
 		if (projects.length == 0) {
-			res.status(400).json({
+			res.status(200).json({
 				status: false,
 				message: "No hay proyectos",
 			});

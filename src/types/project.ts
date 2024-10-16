@@ -7,8 +7,7 @@ export interface ReqCreateProject
 		encargadoId: number;
 		userId: number;
 		enteEmail: string;
-		estadoId: string;
-		estado: string;
+
 		municipioId: string;
 		municipio: string;
 		parroquiaId: string;
