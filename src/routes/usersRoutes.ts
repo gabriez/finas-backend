@@ -16,9 +16,9 @@ export const UsersRoutes = () => {
 	// verifyToken
 	routerRoot.get("/", verifyToken, getUsers);
 
-	routerRoot.get("/:id", verifyToken, isSuperAdmin, getOneUser);
-
 	routerRoot.get("/roles", getRoles);
+
+	routerRoot.get("/:id", verifyToken, isSuperAdmin, getOneUser);
 
 	routerRoot.post("/", verifyToken, isSuperAdmin, createUser);
 
