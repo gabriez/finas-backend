@@ -58,6 +58,7 @@ const loginHandler = async (req: ReqLogin, res: ResponseAPI) => {
 						username: user.dataValues.username,
 						email: user.dataValues.email,
 						rol: user.dataValues.role.dataValues.rol,
+						id: user.dataValues.id,
 					},
 					token: createToken(user),
 				},
