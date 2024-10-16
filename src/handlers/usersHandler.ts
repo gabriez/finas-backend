@@ -26,7 +26,7 @@ const getUsers = async (req: ReqGetUsers, res: ResponseAPI) => {
 		}
 
 		let users = await Users.findAll({
-			attributes: { exclude: ["password", "createdAt", "updatedAt", "roleId"] },
+			attributes: { exclude: ["password", "createdAt", "updatedAt"] },
 			include: [
 				{
 					model: Roles,
@@ -150,6 +150,7 @@ const createUser = async (req: ReqCreateUser, res: ResponseAPI) => {
 				phone: createdUser.dataValues.phone,
 				cedula: createdUser.dataValues.cedula,
 				role: { rol: role.rol, id: role.id },
+				roleId: createdUser.dataValues.roleId,
 			},
 		});
 	} catch (error) {

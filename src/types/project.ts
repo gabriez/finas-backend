@@ -7,13 +7,13 @@ export interface ReqCreateProject
 		encargadoId: number;
 		userId: number;
 		enteEmail: string;
-		estadoId: number;
+		estadoId: string;
 		estado: string;
-		municipioId: number;
+		municipioId: string;
 		municipio: string;
-		parroquiaId: number;
+		parroquiaId: string;
 		parroquia: string;
-		sectorId: number;
+		sectorId: string;
 		sector: string;
 		puntoDeReferencia: string;
 		coordenadasLat: string;
