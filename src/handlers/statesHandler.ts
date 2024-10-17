@@ -60,7 +60,6 @@ const sectorHandler = async (req: RequestSector, res: ResponseAPI) => {
 		const { data } = await axios.get(
 			`${URL}/listadoComunidad?token=${req.token}&codEntidad=21&codMunicipio=${codMunicipio}&codParroquia=${codParroquia}`
 		);
-		console.log(data);
 		res.status(200).json({
 			status: true,
 			message: "Los sectores se obtuvieron exitosamente",
