@@ -40,7 +40,7 @@ const CacheStatesMiddleware = async (
 		cache.put(
 			"cachedData",
 			data.token,
-			data.data.expiry_time - data.data.broadcast_time
+			data.data.expiry_time - data.data.broadcast_time - 10
 		);
 
 		next();
@@ -52,11 +52,6 @@ const CacheStatesMiddleware = async (
 		});
 		return;
 	}
-
-	// Fetch data from the database or external API
-
-	// Cache the data for future use
-	// cache.put("cachedData", newData, 10 * 60 * 1000); // Cache for 10 minutes
 };
 
 export default CacheStatesMiddleware;
