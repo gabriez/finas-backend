@@ -10,8 +10,8 @@ import {
 export const DatabaseRoutes = () => {
 	const routerRoot = Router();
 
-	routerRoot.post("/exportacion", ExportacionHandler);
-	routerRoot.post("/importacion", ImportacionHandler);
+	routerRoot.post("/export", ExportacionHandler);
+	routerRoot.post("/import", ImportacionHandler);
 
 	return routerRoot;
 };

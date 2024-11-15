@@ -11,13 +11,14 @@ import {
 	PatchProject,
 } from "../handlers/projectsHandler.js";
 import HandleInputErrorsMiddleware from "../middlewares/validations.js";
+import { isSuperAdmin, verifyToken } from "../middlewares/authentication.js";
 
 export const ProjectRoutes = () => {
 	const routerRoot = Router();
-	routerRoot.post("/", CreateProjectHandler);
-	routerRoot.get("/", GetProjects);
-	routerRoot.get("/status", GetStatus);
-	routerRoot.get("/statistics", GetStatistics);
+	routerRoot.post("/", verifyToken, isSuperAdmin, CreateProjectHandler);
+	routerRoot.get("/", verifyToken, GetProjects);
+	routerRoot.get("/status", verifyToken, GetStatus);
+	routerRoot.get("/statistics", verifyToken, GetStatistics);
 
 	routerRoot.get(
 		"/:id",

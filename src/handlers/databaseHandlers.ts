@@ -1,24 +1,66 @@
+import { Op } from "sequelize";
 import Projects from "../models/Projects.model.js";
 import Roles from "../models/Roles.model.js";
 import Users from "../models/Users.model.js";
-import { ReqImportData } from "../types/database";
-import { RequestAPI, ResponseAPI } from "../types/express";
+import type { ReqExport, ReqImportData } from "../types/database";
+import type { ResponseAPI } from "../types/express";
 
-export const ExportacionHandler = async (req: RequestAPI, res: ResponseAPI) => {
+export const ExportacionHandler = async (req: ReqExport, res: ResponseAPI) => {
 	try {
-		const users = await Users.findAll();
-		const projects = await Projects.findAll();
-		const roles = await Roles.findAll();
+		const { email, password } = req.body;
 
-		res.status(200).json({
-			status: true,
-			data: {
-				users,
-				projects,
-				roles,
+		if (!email || !password) {
+			res.status(422).json({
+				data: null,
+				status: false,
+				message: "El email y contraseña son obligatorios",
+			});
+			return;
+		}
+
+		const user = await Users.findOne({
+			where: {
+				email,
 			},
-			message: "Exito",
+			include: ["role"],
 		});
+
+		if (!user) {
+			res.status(422).json({
+				data: null,
+				status: false,
+				message: "El usuario no existe",
+			});
+			return;
+		}
+		const isMatch = await user.comparePassword(password);
+
+		if (!isMatch || user.dataValues.role.dataValues.rol != "admin") {
+			res.status(401).json({
+				status: false,
+				message: "Forbidden",
+			});
+			return;
+		}
+
+		const users = await Users.findAll({
+			where: {
+				email: {
+					[Op.ne]: "superadmin@gmail.com",
+				},
+			},
+		});
+		const projects = await Projects.findAll();
+		let respaldoData = JSON.stringify({
+			users,
+			projects,
+		});
+		let filename = "respaldo.json";
+
+		res.setHeader("Content-Type", "application/json");
+		res.setHeader("Content-disposition", "attachment; filename=" + filename);
+
+		res.status(200).send(respaldoData);
 		return;
 	} catch (error) {
 		console.log("> error in ExportacionHandler", error);
@@ -37,7 +79,42 @@ export const ImportacionHandler = async (
 ) => {
 	try {
 		const { body } = req;
-		const roles = await Roles.bulkCreate(body.roles);
+		const { email, password } = req.body;
+
+		if (!email || !password) {
+			res.status(422).json({
+				data: null,
+				status: false,
+				message: "El email y contraseña son obligatorios",
+			});
+			return;
+		}
+
+		const user = await Users.findOne({
+			where: {
+				email,
+			},
+			include: ["role"],
+		});
+
+		if (!user) {
+			res.status(422).json({
+				data: null,
+				status: false,
+				message: "El usuario no existe",
+			});
+			return;
+		}
+		const isMatch = await user.comparePassword(password);
+
+		if (!isMatch || user.dataValues.role.dataValues.rol != "admin") {
+			res.status(401).json({
+				status: false,
+				message: "Forbidden",
+			});
+			return;
+		}
+
 		const users = await Users.bulkCreate(body.users);
 		const projects = await Projects.bulkCreate(body.projects);
 
@@ -46,7 +123,6 @@ export const ImportacionHandler = async (
 			data: {
 				users,
 				projects,
-				roles,
 			},
 			message: "Exito",
 		});

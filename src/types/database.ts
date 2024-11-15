@@ -7,6 +7,17 @@ import { RolesI, UserI } from "./users";
 
 export interface ReqImportData
 	extends RequestAPI<
-		{ projects: Projects[] | any; roles: Roles[] | any; users: Users[] | any },
+		{
+			email: string;
+			password: string;
+			projects: Projects[] | any;
+			users: Users[] | any;
+		},
 		{}
 	> {}
+
+export interface ReqExport
+	extends RequestAPI<{
+		email: string;
+		password: string;
+	}> {}
