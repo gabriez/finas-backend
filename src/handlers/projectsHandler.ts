@@ -1,4 +1,5 @@
 import Projects from "../models/Projects.model.js";
+import Users from "../models/Users.model.js";
 import { RequestAPI, ResponseAPI } from "../types/express";
 import {
 	ReqCreateProject,
@@ -188,7 +189,8 @@ const GetStatus = async (req: ReqGetOnlyProject, res: ResponseAPI) => {
 const GetStatistics = async (req: RequestAPI, res: ResponseAPI) => {
 	try {
 		const projects = await Projects.findAll({
-			order: [["createdAt", "DESC"]],
+			order: [["updatedAt", "DESC"]],
+			include: ["encargado"],
 		});
 
 		if (projects.length == 0) {
@@ -199,53 +201,83 @@ const GetStatistics = async (req: RequestAPI, res: ResponseAPI) => {
 			return;
 		}
 
-		const statistics = {
-			finalized: 0,
-			inProgress: 0,
-			stopped: 0,
-			notFinished: 0,
-			lastProject: "",
-			moreProjectsSector: "",
-			moreProjectsSectorCount: 0,
-			secondProjectsSector: "",
-			secondMoreProjectsSectorCount: 0,
-			restProjectsCount: 0,
+		let municipiosData = {};
+		let projectsFinalized = {
+			enero: { mes: "enero", finalizados: 0 },
+			febrero: { mes: "febrero", finalizados: 0 },
+			marzo: { mes: "marzo", finalizados: 0 },
+			abril: { mes: "abril", finalizados: 0 },
+			mayo: { mes: "mayo", finalizados: 0 },
+			junio: { mes: "junio", finalizados: 0 },
+			julio: { mes: "julio", finalizados: 0 },
+			agosto: { mes: "agosto", finalizados: 0 },
+			septiembre: { mes: "septiembre", finalizados: 0 },
+			octubre: { mes: "octubre", finalizados: 0 },
+			noviembre: { mes: "noviembre", finalizados: 0 },
+			diciembre: { mes: "diciembre", finalizados: 0 },
 		};
+		let encargadosProjects = {};
+		let totalProjects = projects.length;
 
-		statistics.lastProject = projects[0].dataValues.titulo;
-
-		projects.forEach((project) => {
-			if (project.dataValues.status == "Finalizado") statistics.finalized++;
-			if (project.dataValues.status == "Inconcluso") statistics.notFinished++;
-			if (project.dataValues.status == "En Ejecución") statistics.inProgress++;
-			if (project.dataValues.status == "Paralizado") statistics.stopped++;
-		});
-		let projectMap = new Map();
 		for (let project of projects) {
-			let key = project.dataValues.sector;
-			let value = projectMap.get(project.dataValues.sector);
-			if (value) {
-				value++;
+			let monthNumber = new Date(project.dataValues.updatedAt);
+
+			let month = monthNumber.toLocaleString("es-ES", { month: "long" });
+
+			if (
+				projectsFinalized[month] &&
+				project.dataValues.status == "Finalizado"
+			) {
+				projectsFinalized[month].finalizados += 1;
+			} else if (project.dataValues.status == "Finalizado") {
+				projectsFinalized[month] = { mes: month, finalizados: 1 };
+			}
+
+			let encargado = project.dataValues.encargado.dataValues;
+			let encargadoId = project.dataValues.encargadoId;
+
+			if (encargadosProjects[encargadoId]) {
+				encargadosProjects[encargadoId].value += 1;
+				encargadosProjects[encargadoId].chartValue =
+					(encargadosProjects[encargadoId].value / totalProjects) * 100;
 			} else {
-				value = 1;
+				encargadosProjects[encargadoId] = {
+					value: 1,
+					name: encargado.nombre + " " + encargado.apellido,
+					chartValue: (1 / totalProjects) * 100,
+				};
 			}
-			projectMap.set(key, value);
-		}
 
-		for (let [value, key] of projectMap.entries()) {
-			if (value > statistics.moreProjectsSectorCount) {
-				statistics.secondMoreProjectsSectorCount =
-					statistics.moreProjectsSectorCount;
-				statistics.secondProjectsSector = statistics.moreProjectsSector;
-				statistics.moreProjectsSectorCount = value;
-				statistics.moreProjectsSector = key;
+			let municipio = project.dataValues.municipio;
+
+			if (municipiosData[municipio]) {
+				municipiosData[municipio].value += 1;
+				municipiosData[municipio].chartValue =
+					(municipiosData[municipio].value / totalProjects) * 100;
+
+				continue;
 			}
-			statistics.restProjectsCount += value;
+			municipiosData[municipio] = {
+				name: municipio,
+				value: 1,
+				chartValue: (1 / totalProjects) * 100,
+			};
 		}
+		municipiosData = Object.values(municipiosData).sort((a: any, b: any) => {
+			return b.value - a.value;
+		});
 
-		statistics.restProjectsCount -=
-			statistics.secondMoreProjectsSectorCount +
-			statistics.moreProjectsSectorCount;
+		encargadosProjects = Object.values(encargadosProjects).sort(
+			(a: any, b: any) => {
+				return b.value - a.value;
+			}
+		);
+
+		const statistics = {
+			municipiosData: municipiosData,
+			projectsFinalized: Object.values(projectsFinalized),
+			encargadosProjects: encargadosProjects,
+		};
 
 		res.status(200).json({
 			status: true,
