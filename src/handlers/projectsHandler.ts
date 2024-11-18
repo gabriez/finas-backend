@@ -158,6 +158,14 @@ const PatchProject = async (req: ReqPatchProject, res: ResponseAPI) => {
 			return;
 		}
 
+		if (project.dataValues.status === "Finalizado") {
+			res.status(400).json({
+				status: false,
+				message: "No puede modificar un proyecto ya finalizado",
+			});
+			return;
+		}
+
 		project = await project.update(req.body);
 
 		res.status(200).json({
