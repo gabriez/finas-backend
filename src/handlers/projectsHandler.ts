@@ -1,3 +1,6 @@
+import path from "path";
+import fs from "fs";
+import Mustache from "mustache";
 import Projects from "../models/Projects.model.js";
 import Users from "../models/Users.model.js";
 import { RequestAPI, ResponseAPI } from "../types/express";
@@ -6,6 +9,8 @@ import {
 	ReqGetOnlyProject,
 	ReqPatchProject,
 } from "../types/project";
+import puppeteer from "puppeteer";
+import dayjs from "dayjs";
 
 const status = ["Paralizado", "Inconcluso", "En Ejecución", "Finalizado"];
 
@@ -185,7 +190,7 @@ const PatchProject = async (req: ReqPatchProject, res: ResponseAPI) => {
 	}
 };
 
-const GetStatus = async (req: ReqGetOnlyProject, res: ResponseAPI) => {
+const GetStatus = async (req: RequestAPI, res: ResponseAPI) => {
 	res.status(200).json({
 		status: true,
 		data: status,
@@ -304,6 +309,87 @@ const GetStatistics = async (req: RequestAPI, res: ResponseAPI) => {
 	}
 };
 
+const GetReportProject = async (req: ReqGetOnlyProject, res: ResponseAPI) => {
+	try {
+		const { id } = req.params;
+		const project = await Projects.findByPk(id, {
+			include: ["encargado"],
+		});
+
+		if (!project) {
+			res.status(400).json({
+				status: false,
+				message: "El proyecto no existe",
+			});
+			return;
+		}
+
+		const pathTemplates = ["src", "templates"];
+		const pathStylesEI = [...pathTemplates, "reporte-style.css"];
+		const pathTemplateEI = [...pathTemplates, "reporte.html"];
+		const templateEIFullpath = path.join(process.cwd(), ...pathTemplateEI);
+		const stylesEIFullpath = path.join(process.cwd(), ...pathStylesEI);
+		const templateEI = fs.readFileSync(templateEIFullpath, {
+			encoding: "utf8",
+		});
+
+		let encargado = project.dataValues.encargado.dataValues;
+		let dataValues = project.dataValues;
+		const proyecto = {
+			titulo: dataValues.titulo, // Ejemplo: "Proyecto A"
+			ente: dataValues.ente, // Ejemplo: "Organización X"
+			propuesta: dataValues.propuesta, // Ejemplo: "Propuesta de mejora"
+			descripcion: dataValues.descripcion, // Ejemplo: "Descripción detallada del proyecto"
+			municipio: dataValues.municipio, // Ejemplo: "Municipio Y"
+			parroquia: dataValues.parroquia, // Ejemplo: "Parroquia Z"
+			sector: dataValues.sector, // Ejemplo: "Sector 1"
+			puntoDeReferencia: dataValues.puntoDeReferencia, // Ejemplo: "Cerca de la plaza principal"
+			coordenadasLong: dataValues.coordenadasLong, // Ejemplo: "-66.9036"
+			coordenadasLat: dataValues.coordenadasLat, // Ejemplo: "10.4806"
+			anoAprob: dataValues.anoAprob.toString(), // Ejemplo: "2024"
+			projectFuncionario: encargado.nombre + " " + encargado.apellido, // Ejemplo: "Juan Pérez"
+			observacion: dataValues.observacion, // Ejemplo: "Observación inicial"
+			lapsoInicio: dayjs(dataValues.lapsoInicio).format("DD/MM/YYYY"), // Ejemplo: "01/01/2024"
+			lapsoFin: dayjs(dataValues.lapsoFin).format("DD/MM/YYYY"), // Ejemplo: "31/12/2024"
+		};
+		console.log(templateEIFullpath);
+		console.log(stylesEIFullpath);
+
+		// Rellenar el template de "Factura electrónica" con la data correspondiente
+		const filledTemplateEI = Mustache.render(templateEI, proyecto);
+
+		const browser = await puppeteer.launch({ headless: true });
+		const page = await browser.newPage();
+
+		// Setear el contenido del template de la factura electrónica
+		await page.setContent(filledTemplateEI, { waitUntil: "domcontentloaded" });
+		await page.addStyleTag({ path: stylesEIFullpath });
+		page.on("console", (msg) => console.log("PAGE LOG:", msg.text()));
+
+		// Generar PDF a partir de la página
+		const pdfBuffer = await page.pdf({
+			format: "A4",
+			printBackground: true,
+		});
+		fs.writeFileSync("debug-output.pdf", pdfBuffer);
+
+		await browser.close();
+
+		// Configura la respuesta para mostrar el PDF en el navegador
+		res.setHeader("Content-Type", "application/pdf");
+		res.setHeader("Content-Disposition", `inline; filename=factura_${id}.pdf`);
+		res.send(pdfBuffer);
+		return;
+	} catch (error) {
+		console.log("> error in template GetReportProject", error);
+		res.status(422).json({
+			status: false,
+			message: "An unexpected error occurred. Please try again later.",
+		});
+		return;
+	}
+};
+
 export {
 	CreateProjectHandler,
 	GetOnlyProjectHandler,
@@ -312,4 +398,5 @@ export {
 	GetProjects,
 	PatchProject,
 	GetStatistics,
+	GetReportProject,
 };

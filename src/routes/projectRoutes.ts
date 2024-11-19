@@ -6,6 +6,7 @@ import {
 	DeleteProject,
 	GetOnlyProjectHandler,
 	GetProjects,
+	GetReportProject,
 	GetStatistics,
 	GetStatus,
 	PatchProject,
@@ -25,6 +26,13 @@ export const ProjectRoutes = () => {
 		param("id").isInt().withMessage("ID invalido"),
 		HandleInputErrorsMiddleware,
 		GetOnlyProjectHandler
+	);
+
+	routerRoot.get(
+		"/report/:id",
+		param("id").isInt().withMessage("ID invalido"),
+		HandleInputErrorsMiddleware,
+		GetReportProject
 	);
 
 	routerRoot.patch("/:id", PatchProject);

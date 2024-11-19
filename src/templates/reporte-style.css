@@ -1,0 +1,93 @@
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.root {
+  padding: 20px;
+}
+
+.top {
+  height: 20px;
+  flex-shrink: 0;
+  background: #073D0B;
+}
+
+.container {
+  width: 210mm;
+  height: 297mm;
+  margin: 0 auto;
+  box-shadow: 0px 0px 55px #bfbfbf;
+  box-sizing: border-box;
+}
+
+.padding-global {
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.header img {
+  height: 80px;
+  padding-left: 30px;
+}
+
+.title {
+  text-align: center;
+  color: #444;
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.subtitle {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  grid-template-areas:
+    "municipio parroquia"
+    "sector punto"
+    "long punto"
+    "lat year";
+}
+
+.section textarea {
+  min-width: none;
+  resize: none;
+  min-height: 100px;
+  background-color: #f0f0f0;
+  padding: 10px;
+  text-align: left;
+  grid-area: punto;
+}
+
+label {
+  background-color: #f0f0f0;
+  padding: 10px;
+  text-align: left;
+}
+
+.label-municipio { grid-area: municipio; }
+.label-parroquia { grid-area: parroquia; }
+.label-sector { grid-area: sector; }
+.label-long { grid-area: long; }
+.label-lat { grid-area: lat; }
+.label-year { grid-area: year; }
+
+span {
+  font-weight: normal;
+}
