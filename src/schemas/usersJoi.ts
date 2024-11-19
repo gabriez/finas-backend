@@ -18,7 +18,14 @@ const schemaCreateUser = Joi.object({
   }),
 });
 
+const schemaId = Joi.object({
+
+  id: Joi.number().required()
+  
+});
+
 const validator = (schema) => (payload) =>
   schema.validate(payload, { abortEarly: false });
 
 export const validateUser = validator(schemaCreateUser);
+export const validateId = validator(schemaId);
