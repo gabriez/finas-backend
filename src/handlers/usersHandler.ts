@@ -10,7 +10,7 @@ import {
 import { RequestAPI, ResponseAPI } from "../types/express";
 import Roles from "../models/Roles.model.js";
 import { Op } from "sequelize";
-import { validateUser } from "../schemas/usersJoi.js";
+import { validateUser, validateId } from "../schemas/usersJoi.js";
 
 const getUsers = async (req: ReqGetUsers, res: ResponseAPI) => {
   try {
@@ -61,6 +61,17 @@ const getUsers = async (req: ReqGetUsers, res: ResponseAPI) => {
 const getOneUser = async (req: ReqGetOneUser, res: ResponseAPI) => {
   try {
     let { id } = req.params;
+
+    let { values, error } = validateId({id});
+
+    if (error) {
+      res.status(400).json({
+        status: false,
+        message: "Mal formato de informacion",
+        data: error.details.map((item) => item.message),
+      });
+      return;
+    };
 
     let user = await Users.findByPk(id, {
       include: {
@@ -182,6 +193,28 @@ const putUser = async (req: ReqUpdateUser, res: ResponseAPI) => {
   try {
     let usr = req.body;
     let { id } = req.params;
+
+    let { values: idValues, error: idError } = validateId({ id });
+
+    if (idError) {
+      res.status(400).json({
+        status: false,
+        message: "Mal formato de informacion",
+        data: idError.details.map((item) => item.message),
+      });
+      return;
+    };
+
+    let { values: userValues, error: userError } = validateUser(req.body);
+
+    if (userError) {
+      res.status(400).json({
+        status: false,
+        message: "Mal formato de informacion",
+        data: userError.details.map((item) => item.message),
+      });
+      return;
+    }
 
     let user = await Users.findByPk(id);
 
