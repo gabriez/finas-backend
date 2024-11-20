@@ -210,9 +210,10 @@ const putUser = async (req: ReqUpdateUser, res: ResponseAPI) => {
 		}
 
 		let password = req.body.password;
+		console.log(password);
 		if (password != "") {
 			let validatePassword = new RegExp("^[a-zA-Z0-9]{3,30}$");
-			if (validatePassword.test(password)) {
+			if (!validatePassword.test(password)) {
 				res.status(400).json({
 					status: false,
 					message: "La contraseña no cumple los valores requeridos",
