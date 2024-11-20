@@ -364,14 +364,12 @@ const GetReportProject = async (req: ReqGetOnlyProject, res: ResponseAPI) => {
 		// Setear el contenido del template de la factura electrónica
 		await page.setContent(filledTemplateEI, { waitUntil: "domcontentloaded" });
 		await page.addStyleTag({ path: stylesEIFullpath });
-		page.on("console", (msg) => console.log("PAGE LOG:", msg.text()));
 
 		// Generar PDF a partir de la página
 		const pdfBuffer = await page.pdf({
 			format: "A4",
 			printBackground: true,
 		});
-		fs.writeFileSync("debug-output.pdf", pdfBuffer);
 
 		await browser.close();
 

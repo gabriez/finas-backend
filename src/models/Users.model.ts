@@ -83,12 +83,4 @@ class Users extends Model {
 	}
 }
 
-// const encryptPassword = async (instance: Users) => {
-// 	const salt = await bcrypt.genSalt(10);
-// 	console.log(instance.password);
-// 	instance.password = await bcrypt.hash(instance.password, salt);
-// };
-
-// Users.beforeCreate("encryptPassword", Users.encryptPassword);
-
 export default Users;
