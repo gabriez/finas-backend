@@ -208,9 +208,8 @@ const putUser = async (req: ReqUpdateUser, res: ResponseAPI) => {
 			});
 			return;
 		}
+		let { password, ...body } = req.body;
 
-		let password = req.body.password;
-		console.log(password);
 		if (password != "") {
 			let validatePassword = new RegExp("^[a-zA-Z0-9]{3,30}$");
 			if (!validatePassword.test(password)) {
@@ -221,7 +220,7 @@ const putUser = async (req: ReqUpdateUser, res: ResponseAPI) => {
 			}
 		}
 
-		let { values: userValues, error: userError } = validateEditUser(req.body);
+		let { values: userValues, error: userError } = validateEditUser(body);
 
 		if (userError) {
 			res.status(400).json({
