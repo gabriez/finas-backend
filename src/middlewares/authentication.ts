@@ -81,4 +81,16 @@ async function isEncargado(
 	next();
 }
 
-export { verifyToken, isSuperAdmin, isEncargado };
+async function notUser(req: RequestAPI, resp: ResponseAPI, next: NextFunction) {
+	if (isAutorized("user", req.user)) {
+		resp.status(403).json({
+			status: false,
+			message: "Forbidden!",
+		});
+		return;
+	}
+
+	next();
+}
+
+export { verifyToken, isSuperAdmin, isEncargado, notUser };

@@ -15,6 +15,7 @@ import HandleInputErrorsMiddleware from "../middlewares/validations.js";
 import {
 	isEncargado,
 	isSuperAdmin,
+	notUser,
 	verifyToken,
 } from "../middlewares/authentication.js";
 
@@ -43,7 +44,7 @@ export const ProjectRoutes = () => {
 		GetReportProject
 	);
 
-	routerRoot.patch("/:id", verifyToken, isEncargado, PatchProject);
+	routerRoot.patch("/:id", verifyToken, notUser, PatchProject);
 	routerRoot.delete("/:id", verifyToken, isSuperAdmin, DeleteProject);
 
 	return routerRoot;
