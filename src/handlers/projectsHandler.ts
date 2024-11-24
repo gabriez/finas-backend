@@ -139,6 +139,13 @@ const DeleteProject = async (req: ReqGetOnlyProject, res: ResponseAPI) => {
 			return;
 		}
 
+		if (project.dataValues.status === "Finalizado") {
+			res.status(400).json({
+				status: false,
+				message: "No puede eliminar un proyecto finalizado",
+			});
+			return;
+		}
 		await project.destroy();
 
 		res.status(200).json({

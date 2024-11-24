@@ -65,4 +65,20 @@ async function isSuperAdmin(
 	next();
 }
 
-export { verifyToken, isSuperAdmin };
+async function isEncargado(
+	req: RequestAPI,
+	resp: ResponseAPI,
+	next: NextFunction
+) {
+	if (!isAutorized("encargado", req.user) || !isAutorized("admin", req.user)) {
+		resp.status(403).json({
+			status: false,
+			message: "Forbidden!",
+		});
+		return;
+	}
+
+	next();
+}
+
+export { verifyToken, isSuperAdmin, isEncargado };

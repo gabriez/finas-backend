@@ -12,7 +12,11 @@ import {
 	PatchProject,
 } from "../handlers/projectsHandler.js";
 import HandleInputErrorsMiddleware from "../middlewares/validations.js";
-import { isSuperAdmin, verifyToken } from "../middlewares/authentication.js";
+import {
+	isEncargado,
+	isSuperAdmin,
+	verifyToken,
+} from "../middlewares/authentication.js";
 
 export const ProjectRoutes = () => {
 	const routerRoot = Router();
@@ -39,8 +43,8 @@ export const ProjectRoutes = () => {
 		GetReportProject
 	);
 
-	routerRoot.patch("/:id", PatchProject);
-	routerRoot.delete("/:id", DeleteProject);
+	routerRoot.patch("/:id", isEncargado, verifyToken, PatchProject);
+	routerRoot.delete("/:id", isSuperAdmin, verifyToken, DeleteProject);
 
 	return routerRoot;
 };
