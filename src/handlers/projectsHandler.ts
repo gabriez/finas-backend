@@ -11,6 +11,7 @@ import {
 } from "../types/project";
 import puppeteer from "puppeteer";
 import dayjs from "dayjs";
+import { parseNumber } from "../lib/helpers.js";
 
 const status = ["Paralizado", "Inconcluso", "En Ejecución", "Finalizado"];
 
@@ -84,8 +85,19 @@ const GetOnlyProjectHandler = async (
 
 const GetProjects = async (req: RequestAPI, res: ResponseAPI) => {
 	try {
-		const projects = await Projects.findAll();
+		// Destructure and parse query parameters with defaults
+		let { skip = "0", limit = "100" } = req.query as {
+			skip?: string;
+			limit?: string;
+		};
 
+		const skipNum = parseNumber(skip, "Skip");
+		const limitNum = parseNumber(limit, "Limit");
+
+		const { rows: projects, count: total } = await Projects.findAndCountAll({
+			limit: limitNum,
+			offset: skipNum,
+		});
 		if (projects.length == 0) {
 			res.status(200).json({
 				status: false,
@@ -96,7 +108,10 @@ const GetProjects = async (req: RequestAPI, res: ResponseAPI) => {
 
 		res.status(200).json({
 			status: true,
-			data: projects,
+			data: {
+				count: total,
+				projects,
+			},
 			message: "Exito",
 		});
 		return;

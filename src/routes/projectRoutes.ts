@@ -17,7 +17,11 @@ import { isSuperAdmin, verifyToken } from "../middlewares/authentication.js";
 export const ProjectRoutes = () => {
 	const routerRoot = Router();
 	routerRoot.post("/", verifyToken, isSuperAdmin, CreateProjectHandler);
-	routerRoot.get("/", verifyToken, GetProjects);
+	routerRoot.get(
+		"/",
+		// verifyToken,
+		GetProjects
+	);
 	routerRoot.get("/status", verifyToken, GetStatus);
 	routerRoot.get("/statistics", verifyToken, GetStatistics);
 

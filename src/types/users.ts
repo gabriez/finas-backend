@@ -41,6 +41,8 @@ export interface ReqGetUsers
 		{},
 		{
 			rol: "encargado" | "all";
+			skip: number;
+			limit: number;
 		}
 	> {}
 

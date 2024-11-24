@@ -15,14 +15,27 @@ import {
 	validateId,
 	validateEditUser,
 } from "../schemas/usersJoi.js";
+import { parseNumber } from "../lib/helpers.js";
 
 const getUsers = async (req: ReqGetUsers, res: ResponseAPI) => {
 	try {
-		let query: string | string[] = req.query.rol;
+		// let query: string | string[] = req.query.rol;
+		let {
+			skip = "0",
+			limit = "100",
+			rol = "all",
+		} = req.query as unknown as {
+			skip?: string;
+			limit?: string;
+			rol?: string | string[];
+		};
 
-		if (query == "all") {
-			query = ["admin", "user"];
-		} else if (query != "encargado") {
+		const skipNum = parseNumber(skip, "Skip");
+		const limitNum = parseNumber(limit, "Limit");
+
+		if (rol == "all") {
+			rol = ["admin", "user"];
+		} else if (rol != "encargado") {
 			res.status(404).json({
 				status: false,
 				message: "El rol no existe",
@@ -30,13 +43,15 @@ const getUsers = async (req: ReqGetUsers, res: ResponseAPI) => {
 			return;
 		}
 
-		let users = await Users.findAll({
+		let { rows: users, count: total } = await Users.findAndCountAll({
 			attributes: { exclude: ["password", "createdAt", "updatedAt"] },
+			offset: skipNum,
+			limit: limitNum,
 			include: [
 				{
 					model: Roles,
 					where: {
-						rol: query,
+						rol: rol,
 					},
 					attributes: { exclude: ["createdAt", "updatedAt"] },
 				},
@@ -46,7 +61,7 @@ const getUsers = async (req: ReqGetUsers, res: ResponseAPI) => {
 		res.status(200).json({
 			status: true,
 			message: "Consulta exitosa",
-			data: users,
+			data: { users, count: total },
 		});
 		return;
 	} catch (error) {

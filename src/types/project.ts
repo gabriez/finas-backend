@@ -36,6 +36,16 @@ export interface ReqGetOnlyProject
 		}
 	> {}
 
+export interface ReqGetProjects
+	extends RequestAPI<
+		{},
+		{},
+		{
+			skip: number;
+			limit: number;
+		}
+	> {}
+
 export interface ReqPatchProject
 	extends RequestAPI<
 		{
