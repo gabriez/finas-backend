@@ -43,8 +43,8 @@ export const ProjectRoutes = () => {
 		GetReportProject
 	);
 
-	routerRoot.patch("/:id", isEncargado, verifyToken, PatchProject);
-	routerRoot.delete("/:id", isSuperAdmin, verifyToken, DeleteProject);
+	routerRoot.patch("/:id", verifyToken, isEncargado, PatchProject);
+	routerRoot.delete("/:id", verifyToken, isSuperAdmin, DeleteProject);
 
 	return routerRoot;
 };
