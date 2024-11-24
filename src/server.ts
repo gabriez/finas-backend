@@ -5,8 +5,6 @@ import morgan from "morgan";
 
 import router from "./routes.js";
 import db from "./config/db.js";
-import { seedRoles } from "./seed/seedRoles.js";
-import { seedSuperAdmin } from "./seed/seedSuperAdmin.js";
 
 async function connectDB() {
 	try {
@@ -20,8 +18,8 @@ async function connectDB() {
 }
 
 await connectDB();
-await seedRoles();
-await seedSuperAdmin();
+// await seedRoles();
+// await seedSuperAdmin();
 
 const server = express();
 
